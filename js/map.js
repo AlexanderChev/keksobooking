@@ -55,15 +55,8 @@ var LOCATION_X_MAX = 900;
 var LOCATION_Y_MIN = 100;
 var LOCATION_Y_MAX = 500;
 
-var PIN_MAIN_WIDTH = 62;
-var PIN_MAIN_HEIGHT = 84;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
-
-var CARD_PHOTO_WIDTH = 45;
-var CARD_PHOTO_HEIGHT = 40;
-
-var ESC_KEYCODE = 27;
 
 var mapElement = document.querySelector('.map');
 var mapElementsTemplate = document.querySelector('#map-elements-template').content;
