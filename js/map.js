@@ -23,7 +23,7 @@ var OFFER_TYPES_NAMES = {
   'palace': 'Дворец',
   'flat': 'Квартира',
   'house': 'Дом',
-  'bungalo': 'Бунгало'
+  'bungalo': 'Лачуга'
 };
 
 var OFFER_ROOMS_MIN = 1;
@@ -58,9 +58,10 @@ var LOCATION_Y_MAX = 500;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 
-var mapElement = document.querySelector('.map');
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
 var mapElementsTemplate = document.querySelector('#map-elements-template').content;
-mapElement.classList.remove('map--faded');
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max + 1 - min)) + min;
@@ -137,6 +138,7 @@ function createMapPin(data) {
 
 function createMapCard(data) {
   var element = mapElementsTemplate.querySelector('.map__card').cloneNode(true);
+  element.style.display = 'none';
   element.querySelector('.popup__avatar').src = data.author.avatar;
   element.querySelector('.popup__title').textContent = data.offer.title;
   element.querySelector('.popup__text--address').textContent = data.address;
@@ -188,6 +190,133 @@ function cleanParent(container) {
   }
 }
 
-renderElements(document.querySelector('.map__pins'), createMapPin);
-renderElements(mapElement, createMapCard);
+var mapElement = document.querySelector('.map');
+var adForm = document.querySelector('.ad-form');
+var adFieldsetList = adForm.querySelectorAll('fieldset');
+var pinsContainer = document.querySelector('.map__pins');
+var pinMain = mapElement.querySelector('.map__pin--main');
 
+function setDisabledForm(state) {
+  for (var i = 0; i < adFieldsetList.length; i++) {
+    adFieldsetList[i].disabled = state;
+  }
+
+  if (state) {
+    mapElement.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+  } else {
+    mapElement.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+  }
+}
+
+setDisabledForm(true);
+
+function onPinMouseUp() {
+  pinMain.removeEventListener('mouseup', onPinMouseUp);
+  renderElements(pinsContainer, createMapPin);
+  renderElements(mapElement, createMapCard);
+  setDisabledForm(false);
+}
+
+var pins = document.querySelectorAll('.map__pin');
+
+function openPopUp(e) {
+  var elementPin = e.target.closest('.map__pin');
+  var popUp = document.querySelector('.popup');
+  var popUpCloseBtn = popUp.querySelector('.popup__close');
+
+  if (elementPin && !elementPin.classList.contains('map__pin--main')) {
+
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].classList.remove('map__pin--active');
+    }
+
+    elementPin.classList.add('map__pin--active');
+    popUp.style.display = 'block';
+
+    popUpCloseBtn.addEventListener('click', function () {
+      closePopUp();
+    });
+
+    popUpCloseBtn.addEventListener('keydown', onPopUpEnterPress);
+    document.addEventListener('keydown', onPopUpEscPress);
+  }
+}
+
+function onPopUpEnterPress(e) {
+  if (e.keyCode === ENTER_KEYCODE) {
+    closePopUp();
+  }
+}
+
+function onPopUpEscPress(e) {
+  if (e.keyCode === ESC_KEYCODE) {
+    closePopUp();
+  }
+}
+
+function closePopUp() {
+  document.querySelector('.popup').style.display = 'none';
+  pins = document.querySelectorAll('.map__pin');
+  for (var i = 0; i < pins.length; i++) {
+    pins[i].classList.remove('map__pin--active');
+  }
+}
+
+pinMain.addEventListener('mouseup', onPinMouseUp);
+
+pinsContainer.addEventListener('click', function (e) {
+  openPopUp(e);
+});
+
+pinsContainer.addEventListener('keydown', function (e) {
+  if (e.keyCode === ENTER_KEYCODE) {
+    openPopUp(e);
+  }
+});
+
+var TYPES_MIN_PRICE = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000,
+};
+
+var fielddType = document.querySelector('select[name="type"]');
+var fieldPrice = document.querySelector('input[name="price"]');
+var fieldTimein = document.querySelector('select[name="timein"]');
+var fieldTimeout = document.querySelector('select[name="timeout"]');
+var fieldRooms = document.querySelector('select[name="rooms"]');
+var fieldGuests = document.querySelector('select[name="capacity"]');
+
+fielddType.addEventListener('input', function () {
+  fieldPrice.setAttribute('min', TYPES_MIN_PRICE[fielddType.value]);
+});
+
+fieldTimeout.value = fieldTimein.value;
+
+document.querySelector('.ad-form__element--time').addEventListener('input', function (e) {
+  if (e.target.closest('select[name="timein"]')) {
+    fieldTimeout.value = fieldTimein.value;
+  } else if (e.target.closest('select[name="timeout"]')) {
+    fieldTimein.value = fieldTimeout.value;
+  }
+});
+
+fieldRooms.addEventListener('input', function () {
+  switch (fieldRooms.value) {
+    case '1':
+      fieldGuests.value = '1';
+      break;
+    case '2':
+      fieldGuests.value = '2';
+      break;
+    case '3':
+      fieldGuests.value = '3';
+      break;
+    case '100':
+      fieldGuests.value = '0';
+      break;
+  }
+});
