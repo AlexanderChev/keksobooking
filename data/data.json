@@ -1,0 +1,169 @@
+[{
+  "author": {
+    "avatar": "img/avatars/user01.png"
+  },
+  "offer": {
+    "title": "Большая уютная квартира",
+    "address": "692,217",
+    "price": 736522,
+    "type": "palace",
+    "rooms": 5,
+    "guests": 9,
+    "checkin": "12:00",
+    "checkout": "13:00",
+    "features": ["wifi", "dishwasher", "parking", "washer", "conditioner"],
+    "description": "Это самое лучшее предложение на рынке",
+    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
+  },
+  "location": {
+    "x": 692,
+    "y": 217
+  }
+}, {
+  "author": {
+    "avatar": "img/avatars/user02.png"
+  },
+  "offer": {
+    "title": "Маленькая неуютная квартира",
+    "address": "895,305",
+    "price": 304505,
+    "type": "bungalo",
+    "rooms": 3,
+    "guests": 5,
+    "checkin": "12:00",
+    "checkout": "14:00",
+    "features": ["wifi", "dishwasher", "parking", "washer", "elevator"],
+    "description": "Это самое лучшее предложение на рынке",
+    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
+  },
+  "location": {
+    "x": 895,
+    "y": 305
+  }
+}, {
+  "author": {
+    "avatar": "img/avatars/user03.png"
+  },
+  "offer": {
+    "title": "Огромный прекрасный дворец",
+    "address": "575,265",
+    "price": 614523,
+    "type": "flat",
+    "rooms": 5,
+    "guests": 10,
+    "checkin": "13:00",
+    "checkout": "13:00",
+    "features": [],
+    "description": "Это самое лучшее предложение на рынке",
+    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
+  },
+  "location": {
+    "x": 575,
+    "y": 265
+  }
+}, {
+  "author": {
+    "avatar": "img/avatars/user04.png"
+  },
+  "offer": {
+    "title": "Маленький ужасный дворец",
+    "address": "411,231",
+    "price": 956306,
+    "type": "house",
+    "rooms": 5,
+    "guests": 6,
+    "checkin": "13:00",
+    "checkout": "12:00",
+    "features": ["washer", "elevator", "conditioner"],
+    "description": "Это самое лучшее предложение на рынке",
+    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
+  },
+  "location": {
+    "x": 411,
+    "y": 231
+  }
+}, {
+  "author": {
+    "avatar": "img/avatars/user05.png"
+  },
+  "offer": {
+    "title": "Красивый гостевой домик",
+    "address": "310,141",
+    "price": 629180,
+    "type": "house",
+    "rooms": 5,
+    "guests": 8,
+    "checkin": "13:00",
+    "checkout": "12:00",
+    "features": ["wifi", "washer", "elevator"],
+    "description": "Это самое лучшее предложение на рынке",
+    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
+  },
+  "location": {
+    "x": 310,
+    "y": 141
+  }
+}, {
+  "author": {
+    "avatar": "img/avatars/user06.png"
+  },
+  "offer": {
+    "title": "Некрасивый негостеприимный домик",
+    "address": "720,292",
+    "price": 357873,
+    "type": "house",
+    "rooms": 3,
+    "guests": 8,
+    "checkin": "14:00",
+    "checkout": "14:00",
+    "features": ["washer"],
+    "description": "Это самое лучшее предложение на рынке",
+    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
+  },
+  "location": {
+    "x": 720,
+    "y": 292
+  }
+}, {
+  "author": {
+    "avatar": "img/avatars/user07.png"
+  },
+  "offer": {
+    "title": "Уютное бунгало далеко от моря",
+    "address": "684,195",
+    "price": 277407,
+    "type": "bungalo",
+    "rooms": 3,
+    "guests": 8,
+    "checkin": "12:00",
+    "checkout": "13:00",
+    "features": ["dishwasher", "parking", "elevator"],
+    "description": "Это самое лучшее предложение на рынке",
+    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
+  },
+  "location": {
+    "x": 684,
+    "y": 195
+  }
+}, {
+  "author": {
+    "avatar": "img/avatars/user08.png"
+  },
+  "offer": {
+    "title": "Неуютное бунгало по колено в воде",
+    "address": "630,185",
+    "price": 250486,
+    "type": "house",
+    "rooms": 3,
+    "guests": 10,
+    "checkin": "14:00",
+    "checkout": "14:00",
+    "features": ["dishwasher"],
+    "description": "Это самое лучшее предложение на рынке",
+    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
+  },
+  "location": {
+    "x": 630,
+    "y": 185
+  }
+}]

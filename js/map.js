@@ -46,7 +46,9 @@
   function onMouseDown(evt) {
     evt.preventDefault();
 
-    setActivePage();
+    if (mapElement.classList.contains('map--faded')) {
+      setActivePage(false);
+    }
 
     var PIN_MAIN_WIDTH = 65;
     var PIN_MAIN_HEIGHT = 87;

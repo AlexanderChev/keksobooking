@@ -2,7 +2,7 @@
 
 window.backend = function () {
   var SAVE_URL = 'https://js.dump.academy/keksobooking';
-  var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
+  var LOAD_URL = 'data/data.json';
   var TIMEOUT = 7000;
 
   return {
