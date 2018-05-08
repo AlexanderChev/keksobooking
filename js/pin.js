@@ -1,30 +1,92 @@
 'use strict';
 
-window.pin = function () {
+/**
+ * @fileoverview
+ * @author Alexander Egorichev
+ */
 
+(function () {
+  /**
+   * @const
+   * @type {number}
+   */
   var PIN_WIDTH = 50;
+
+  /**
+   * @const
+   * @type {number}
+   */
   var PIN_HEIGHT = 70;
 
-  var mapElementsTemplate = document.querySelector('#map-elements-template').content;
+  /**
+   * Создает метку на карте
+   * @constructor
+   * @extends {OfferBase}
+   */
+  var Pin = function () {
+    this._onClick = this._onClick.bind(this);
+  };
 
-  function createMapPin(data) {
-    var element = mapElementsTemplate.querySelector('.map__pin').cloneNode(true);
-    element.querySelector('.map__pin img').src = data.author.avatar;
-    element.style.top = (data.location.y - PIN_HEIGHT) + 'px';
-    element.style.left = (data.location.x - PIN_WIDTH / 2) + 'px';
+  Pin.prototype = Object.create(OfferBase.prototype);
 
-    return element;
-  }
+  /**
+   * Создание пина из шаблона
+   * @override
+   */
+  Pin.prototype.render = function () {
+    var template = document.querySelector('#map-elements-template');
 
-  return {
-    renderMapPin: function (offers) {
-      var fragment = document.createDocumentFragment();
+    if (this.element = 'content' in template) {
+      this.element = template.content.querySelector('.map__pin').cloneNode(true);
+    } else {
+      this.element = template.querySelector('.map__pin').cloneNode(true);
+    }
 
-      for (var i = 0; i < offers.length; i++) {
-        fragment.appendChild(createMapPin(offers[i]));
+    this.element.querySelector('.map__pin img').src = this._data.getAvatar();
+    this.element.style.top = (this._data.getLocationY() - PIN_HEIGHT) + 'px';
+    this.element.style.left = (this._data.getLocationX() - PIN_WIDTH / 2) + 'px';
+
+    this._initializeListeners();
+  };
+
+  /**
+   * @private
+   * @override
+   */
+  Pin.prototype._initializeListeners = function () {
+    this.element.addEventListener('click', this._onClick);
+    this.element.addEventListener('keydown', this._onPinEnterPress);
+  };
+
+  /**
+   * @private
+   * @param {Event} evt
+   */
+  Pin.prototype._onClick = function (evt) {
+    if (evt.target.closest('.map__pin:not(map__pin--main)')) {
+      if (typeof this.eventHandler === 'function') {
+        this.eventHandler();
       }
-
-      document.querySelector('.map__pins').appendChild(fragment);
     }
   };
-}();
+
+  /**
+   * @private
+   * @param {Event} evt
+   */
+  Pin.prototype._onPinEnterPress = function (evt) {
+    if (evt.target.closest('.map__pin:not(map__pin--main)')) {
+      if (typeof this.eventHandler === 'function') {
+        window.util.isEnterOrSpaceEvent(evt, this.eventHandler);
+      }
+    }
+  };
+
+  /**
+   * @type {?Function}
+   */
+  Pin.prototype.eventHandler = null;
+
+  window.Pin = Pin;
+
+})();

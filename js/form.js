@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * @fileoverview
+ * @author Alexander Egorichev
+ */
+
 (function () {
   var fieldType = document.querySelector('#type');
   var fieldPrice = document.querySelector('#price');
@@ -20,15 +25,30 @@
     ['0']
   ];
 
-  function syncValues(element, value) {
+  /**
+   * @callback synchronizeFields~syncValues
+   * @param {Element} element
+   * @param {string} value
+   */
+  var syncValues = function (element, value) {
     element.value = value;
-  }
+  };
 
-  function syncValueWithMin(element, value) {
+  /**
+  * @callback synchronizeFields~syncValueWithMin
+  * @param {Element} element
+  * @param {string} value
+  */
+  var syncValueWithMin = function (element, value) {
     element.min = value;
-  }
+  };
 
-  function syncRoomsAndCapacities(element, values) {
+  /**
+  * @callback synchronizeFields~syncRoomsAndCapacities
+  * @param {Element} element
+  * @param {Array.<string>} values
+  */
+  var syncRoomsAndCapacities = function (element, values) {
     var option;
     for (var i = 0; i < element.options.length; i++) {
       option = element.options[i];
@@ -40,7 +60,7 @@
         option.disabled = true;
       }
     }
-  }
+  };
 
   window.synchronizeFields(fieldType, fieldPrice, FORM_TYPES, FORM_TYPES_PRICES, syncValueWithMin);
   window.synchronizeFields(fieldTimein, fieldTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncValues);

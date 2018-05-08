@@ -1,28 +1,91 @@
 'use strict';
 
+/**
+ * @fileoverview
+ * @author Alexander Egorichev
+ */
+
 (function () {
   var mapElement = document.querySelector('.map');
+  var pinsContainer = mapElement.querySelector('.map__pins');
   var pinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var adFieldsetList = adForm.querySelectorAll('fieldset');
 
+  /**
+   * Устанавливает активный класс при клике на метку объявления
+   * @param {Element} currentPin
+   */
+  var setActivePin = function (currentPin) {
+    var pins = document.querySelectorAll('.map__pin:not(map__pin--main');
 
-  function onSuccessSave() {
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].classList.remove('map__pin--active');
+    }
+    currentPin.classList.add('map__pin--active');
+  };
+
+  /**
+   * Отрисовка меток объявлений
+   * @param {Array.<Object>} offers
+   */
+  var renderPins = function (offers) {
+    var fragment = document.createDocumentFragment();
+    var offersList = offers.slice(0);
+
+    offersList = offersList.map(function (offer) {
+      var pinElement = new Pin();
+      pinElement.setData(offer);
+      pinElement.render();
+      fragment.appendChild(pinElement.element);
+
+      /**
+       * @callback Pin~eventHandler
+       */
+      pinElement.eventHandler = function () {
+        setActivePin(pinElement.element);
+
+        var cardElement = new Card();
+        cardElement._data = pinElement._data;
+
+        var popUp = pinsContainer.querySelector('.popup');
+        if (popUp) {
+          pinsContainer.removeChild(popUp);
+        }
+        cardElement.render();
+      };
+
+      return pinElement;
+    });
+
+    pinsContainer.appendChild(fragment);
+  };
+
+  /**
+   * Обработчик успешной отправки данных на сервер с ресетом всех полей формы
+   */
+  var onSuccessSave = function () {
     adForm.reset();
-  }
+  };
 
-  function onError(errorText) {
-    var node = document.createElement('div');
-    node.className = 'error';
-    node.textContent = errorText;
-    document.body.appendChild(node);
+  /**
+   * Обработчик успешной загрузки данный с сервера,
+   * создание объектов с данными
+   * @param {Array.<Object>} data
+   */
+  var onSuccessLoad = function (data) {
+    var loadedOffers = data.map(function (offer) {
+      return new OfferData(offer);
+    });
+    renderPins(loadedOffers);
+  };
 
-    setTimeout(function () {
-      document.body.removeChild(node);
-    }, 3000);
-  }
-
-  function setActivePage(state) {
+  /**
+   * Делает активной карту и форму, загружает списки объявлений,
+   * добавляет обработчик событий на форму.
+   * @param {boolean=} state
+   */
+  var setActivePage = function (state) {
     for (var i = 0; i < adFieldsetList.length; i++) {
       adFieldsetList[i].disabled = state;
     }
@@ -31,19 +94,22 @@
       mapElement.classList.add('map--faded');
       adForm.classList.add('ad-form--disabled');
     } else {
-      window.backend.load(window.pin.renderMapPin, onError);
-      window.backend.load(window.card.renderMapCard, onError);
+      window.backend.load(onSuccessLoad, window.util.onError);
+
       mapElement.classList.remove('map--faded');
       adForm.classList.remove('ad-form--disabled');
 
       adForm.addEventListener('submit', function (evt) {
-        window.backend.save(new FormData(adForm), onSuccessSave, onError);
+        window.backend.save(new FormData(adForm), onSuccessSave, window.util.onError);
         evt.preventDefault();
       });
     }
-  }
+  };
 
-  function onMouseDown(evt) {
+  /**
+   * @param {Event} evt
+   */
+  var onMouseDown = function (evt) {
     evt.preventDefault();
 
     if (mapElement.classList.contains('map--faded')) {
@@ -60,7 +126,10 @@
       y: evt.clientY
     };
 
-    function onMouseMove(moveEvt) {
+    /**
+     * @param {Event} moveEvt
+     */
+    var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
       var shift = {
@@ -97,18 +166,21 @@
       pinMain.style.left = posX + 'px';
       document.querySelector('#address').value = 'x: ' + (posX + PIN_MAIN_WIDTH / 2) +
       ' y: ' + (posY + PIN_MAIN_HEIGHT);
-    }
+    };
 
-    function onMouseUp(upEvt) {
+    /**
+     * @param {Event} upEvt
+     */
+    var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-    }
+    };
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }
+  };
 
   document.addEventListener('DOMContentLoaded', function () {
     setActivePage(true);
