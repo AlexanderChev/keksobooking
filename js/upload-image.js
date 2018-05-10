@@ -1,6 +1,20 @@
 'use strict';
 
+/**
+ * @fileoverview
+ * @author Alexander Egorichev
+ */
+
+/**
+ *
+ * @param {Element} field
+ * @param {function(string)} callback
+ */
 window.uploadImage = function (field, callback) {
+  /**
+   * Доступные форматы изображений
+   * @type {Array.<string>}
+   */
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   field.addEventListener('change', function () {
@@ -15,8 +29,6 @@ window.uploadImage = function (field, callback) {
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        console.log(reader);
-        console.log(reader.result);
         callback(reader.result);
       });
 
