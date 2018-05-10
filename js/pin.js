@@ -53,9 +53,27 @@
    * @private
    * @override
    */
+  Pin.prototype.remove = function () {
+    this.eventHandler = null;
+    this._removeListeners();
+  };
+
+  /**
+   * @private
+   * @override
+   */
   Pin.prototype._initializeListeners = function () {
     this.element.addEventListener('click', this._onClick);
     this.element.addEventListener('keydown', this._onPinEnterPress);
+  };
+
+  /**
+  * @private
+  * @override
+  */
+  Pin.prototype._removeListeners = function () {
+    this.element.removeEventListener('click', this._onClick);
+    this.element.removeEventListener('keydown', this._onPinEnterPress);
   };
 
   /**

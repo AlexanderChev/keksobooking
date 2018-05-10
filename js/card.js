@@ -54,7 +54,7 @@
     this.element.querySelector('.popup__text--address').textContent = this._data.getAddress();
     this.element.querySelector('.popup__text--price').textContent = parseInt(this._data.getPrice(), 10) + ' ₽/ночь';
     this.element.querySelector('.popup__type').textContent = typeName[this._data.getType()];
-    this.element.querySelector('.popup__text--capacity').textContent = this._data.getRooms() + 'комнат для ' + this._data.getGuests() + ' гостей';
+    this.element.querySelector('.popup__text--capacity').textContent = this._data.getRooms() + (this._data.getRooms() > 1 ? ' комнаты' : ' комната') + ' для ' + this._data.getGuests() + (this._data.getGuests() > 1 ? ' гостей' : ' гостя');
     this.element.querySelector('.popup__text--time').textContent = 'Заезд после ' + this._data.getCheckin() + ', выезд до ' + this._data.getCheckout();
     this.element.querySelector('.popup__description').textContent = this._data.getDescription();
 
@@ -88,14 +88,7 @@
    * Удаляет карточку объявления из DOM и все ее события
    */
   Card.prototype.remove = function () {
-    var pins = document.querySelectorAll('.map__pin:not(map__pin--main)');
-
-    for (var i = 0; i < pins.length; i++) {
-      pins[i].classList.remove('map__pin--active');
-    }
-
     container.removeChild(this.element);
-
     this._removeListeners();
   };
 

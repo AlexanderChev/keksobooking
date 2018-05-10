@@ -11,6 +11,11 @@
   var pinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var adFieldsetList = adForm.querySelectorAll('fieldset');
+  var filtersContainer = document.querySelector('.map__filters');
+  var cardElement = null;
+  var loadedOffers = [];
+  var renderedElements = [];
+  var MAX_COUNT_OFFERS = 5;
 
   /**
    * Устанавливает активный класс при клике на метку объявления
@@ -28,12 +33,26 @@
   /**
    * Отрисовка меток объявлений
    * @param {Array.<Object>} offers
+   * @param {boolean=} replace
    */
-  var renderPins = function (offers) {
-    var fragment = document.createDocumentFragment();
-    var offersList = offers.slice(0);
+  var renderPins = function (offers, replace) {
+    if (replace) {
+      if (cardElement) {
+        cardElement.element.remove();
+      }
 
-    offersList = offersList.map(function (offer) {
+      var el;
+      while (el = renderedElements.shift()) {
+        pinsContainer.removeChild(el.element);
+        el.remove();
+      }
+    }
+
+    var fragment = document.createDocumentFragment();
+    var sliceTo = offers.length < MAX_COUNT_OFFERS ? offers.length : MAX_COUNT_OFFERS;
+    renderedElements = offers.slice(0, sliceTo);
+
+    renderedElements = renderedElements.map(function (offer) {
       var pinElement = new Pin();
       pinElement.setData(offer);
       pinElement.render();
@@ -45,13 +64,11 @@
       pinElement.eventHandler = function () {
         setActivePin(pinElement.element);
 
-        var cardElement = new Card();
-        cardElement._data = pinElement._data;
-
-        var popUp = pinsContainer.querySelector('.popup');
-        if (popUp) {
-          pinsContainer.removeChild(popUp);
+        if (cardElement) {
+          cardElement.element.remove();
         }
+        cardElement = new Card();
+        cardElement._data = pinElement._data;
         cardElement.render();
       };
 
@@ -65,7 +82,10 @@
    * Обработчик успешной отправки данных на сервер с ресетом всех полей формы
    */
   var onSuccessSave = function () {
+    window.util.onSuccess();
     adForm.reset();
+    document.querySelector('.ad-form-header__preview img').src = 'img/muffin-grey.svg';
+    document.querySelector('.ad-form__photo').style.backgroundImage = 'none';
   };
 
   /**
@@ -74,10 +94,18 @@
    * @param {Array.<Object>} data
    */
   var onSuccessLoad = function (data) {
-    var loadedOffers = data.map(function (offer) {
+    loadedOffers = data.map(function (offer) {
       return new OfferData(offer);
     });
-    renderPins(loadedOffers);
+    renderPins(window.filterOffers(loadedOffers));
+  };
+
+  /**
+   * @param {Event} evt
+   */
+  var onSubmitForm = function (evt) {
+    window.backend.save(new FormData(adForm), onSuccessSave, window.util.onError);
+    evt.preventDefault();
   };
 
   /**
@@ -99,9 +127,14 @@
       mapElement.classList.remove('map--faded');
       adForm.classList.remove('ad-form--disabled');
 
-      adForm.addEventListener('submit', function (evt) {
-        window.backend.save(new FormData(adForm), onSuccessSave, window.util.onError);
-        evt.preventDefault();
+      adForm.addEventListener('submit', onSubmitForm);
+      filtersContainer.addEventListener('change', function (evt) {
+        var targetField = evt.target;
+        if (targetField.classList.contains('map__filter') || targetField.classList.contains('map__checkbox')) {
+          window.util.debounce(function () {
+            renderPins(window.filterOffers(loadedOffers), true);
+          });
+        }
       });
     }
   };

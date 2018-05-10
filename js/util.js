@@ -68,6 +68,15 @@ window.util = function () {
       }, 3000);
     },
 
+    onSuccess: function () {
+      var successMessage = document.querySelector('.success');
+      successMessage.classList.remove('hidden');
+
+      setTimeout(function () {
+        successMessage.classList.add('hidden');
+      }, 3000);
+    },
+
     /**
      * Функция тротлинга
      * @param {function} callback

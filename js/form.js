@@ -6,12 +6,13 @@
  */
 
 (function () {
-  var fieldType = document.querySelector('#type');
-  var fieldPrice = document.querySelector('#price');
-  var fieldTimein = document.querySelector('#timein');
-  var fieldTimeout = document.querySelector('#timeout');
-  var fieldRooms = document.querySelector('#room_number');
-  var fieldGuests = document.querySelector('#capacity');
+  var form = document.querySelector('.ad-form');
+  var fieldType = form.querySelector('#type');
+  var fieldPrice = form.querySelector('#price');
+  var fieldTimein = form.querySelector('#timein');
+  var fieldTimeout = form.querySelector('#timeout');
+  var fieldRooms = form.querySelector('#room_number');
+  var fieldGuests = form.querySelector('#capacity');
 
   var FORM_CHECKINS = ['12:00', '13:00', '14:00'];
   var FORM_CHECKOUTS = ['12:00', '13:00', '14:00'];
@@ -66,4 +67,17 @@
   window.synchronizeFields(fieldTimein, fieldTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncValues);
   window.synchronizeFields(fieldTimeout, fieldTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncValues);
   window.synchronizeFields(fieldRooms, fieldGuests, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncRoomsAndCapacities);
+
+  var fieldAvatar = form.querySelector('#avatar');
+  var avatarPreview = form.querySelector('.ad-form-header__preview img');
+  var fieldImages = form.querySelector('#images');
+  var imagePreview = form.querySelector('.ad-form__photo');
+
+  window.uploadImage(fieldAvatar, function (result) {
+    avatarPreview.src = result;
+  });
+
+  window.uploadImage(fieldImages, function (result) {
+    imagePreview.style.backgroundImage = 'url(' + result + ')';
+  });
 })();
